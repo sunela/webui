@@ -1,0 +1,41 @@
+Sunela Web UI
+=============
+
+This repository contains the Sunela Web User Interface.
+
+THIS IS AN EXPERIMENTAL PROTOTYPE. THINGS CAN AND WILL CHANGE !
+
+The main purposes of this part of the Sunela project is to demonstrate some
+proof-of-concept functionality, to gain experience with the USB stacks both in
+the SDK (CherryUSB) and in the Web browser (WebUSB), and to develop a better
+understanding of the requirements for a "proper" remote control interface (for
+USB and, later, also Bluetooth LE.)
+
+Known issues:
+- should use bulk instead of control transfers
+- lacks error handling (with recovery), everywhere
+- probably neither the firmware nor this Web UI use the underlying USB stack
+  correctly
+- the Javascript and the use of HTML/CSS are probably quite clumsy, too
+- should encrypt communication over USB (and BTLE)
+- only tested with Chrome (may work with Edge and Opera, too.)
+  For WebUSB browser compatibility, see
+  https://developer.mozilla.org/en-US/docs/Web/API/USB#browser_compatibility
+
+
+Getting started
+---------------
+
+Connect a Sunela device to your PC and unlock it. This will load the accounts
+database to the device's memory, and keep it there, even when the device turns
+off again. (This is, of course, undesirable behaviour. But it's handy for now.)
+
+Load index.html from this repository into your browser:
+file:///path/index.html
+
+Press the "Connect Sunela" button. A list of devices should pop up (should
+show just the one Sunela device connected), where you select the Sunela device,
+and click "Connect".
+
+The browser will then request the list of account names from Sunela, and
+display them on the Javascript console.
