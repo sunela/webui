@@ -1,9 +1,27 @@
 body {
-	font-size:		16px;
-	background-color:	#eae6d1;
+	font-size:		18px;
+	background-color:	white;
 }
 
 @font-face {
 	font-family:		'Open Sans';
 /*        src:                    url(font/OpenSans-ExtraBold.ttf); */
+}
+
+#button-connect {
+	font-size:		18px;
+	font-weight:		bold;
+}
+
+.hidden {
+	display:		none;
+}
+
+.entry {
+	display:		block;
+	font-weight:		bold;
+	background-color:	lightgreen;
+	margin:			1px;
+	padding:		3px;
+	width:			16em;
 }

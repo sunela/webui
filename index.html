@@ -8,28 +8,10 @@
 
 <body>
 <button id="button-connect">Connect Sunela</button>
+<div id="accounts"></div>
 
 <script src="rmt.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-
-// Required use of "user gesture":
-// https://stackoverflow.com/a/70017650/11496135
-
-sunela = new Sunela();
-button = document.getElementById("button-connect");
-
-
-async function open_sunela()
-{
-	await sunela.request_usb();
-	console.log(await sunela.ls());
-}
-
-
-button.addEventListener("click", open_sunela);
-
-</script>
+<script src="main.js" type="text/javascript"></script>
 
 </body>
 </html>
