@@ -19,10 +19,15 @@
 sunela = new Sunela();
 button = document.getElementById("button-connect");
 
-// why we need to use => here:
-// https://stackoverflow.com/a/48241480
 
-button.addEventListener("click", () => sunela.request_usb());
+async function open_sunela()
+{
+	await sunela.request_usb();
+	console.log(await sunela.ls());
+}
+
+
+button.addEventListener("click", open_sunela);
 
 </script>
 

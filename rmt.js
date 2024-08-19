@@ -22,6 +22,10 @@ const SUNELA_MAX_RESPONSE = 256;
 
 
 class Sunela {
+
+	// --- Send a request -------------------------------------------------
+
+
 	send(data)
 	{
 		console.log("sending", data);
@@ -49,6 +53,9 @@ class Sunela {
 	{
 		return this.send(new Uint8Array(0));
 	}
+
+
+	// --- Receive a response ---------------------------------------------
 
 
 	wait(ms)
@@ -82,6 +89,34 @@ class Sunela {
 	}
 
 
+	async response()
+	{
+		var res = [];
+
+		while (1) {
+			var got = await this.receive();
+
+			if (got == "")
+				return res;
+			res.push(got)
+		}
+	}
+
+
+	// --- Operations -----------------------------------------------------
+
+
+	async ls()
+	{
+		await this.begin_request(RDOP_LS, null);
+		await this.end_request();
+		return await this.response();
+	}
+
+
+	// --- Initialization -------------------------------------------------
+
+
 	async request_usb()
 	{
 		this.device = await navigator.usb
@@ -92,17 +127,6 @@ class Sunela {
 		await this.device.open();
 		await this.device.selectConfiguration(1);
 //		await this.device.claimInterface(0);
-
-		await this.begin_request(RDOP_LS, null);
-		await this.end_request();
-
-		while (1) {
-			var got = await this.receive();
-
-			if (got == "")
-				break;
-			console.log(got);
-		}
 	}
 
 
