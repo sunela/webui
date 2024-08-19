@@ -16,8 +16,13 @@
 // Required use of "user gesture":
 // https://stackoverflow.com/a/70017650/11496135
 
+sunela = new Sunela();
 button = document.getElementById("button-connect");
-button.addEventListener("click", request_usb);
+
+// why we need to use => here:
+// https://stackoverflow.com/a/48241480
+
+button.addEventListener("click", () => sunela.request_usb());
 
 </script>
 
