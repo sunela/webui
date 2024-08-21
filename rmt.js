@@ -24,9 +24,12 @@ const SUNELA_USB_PRODUCT = 0xae72;	/* Sunela (AnELok, device 2) */
 const SUNELA_RMT = 4;
 
 const RDOP_LS = 2;
+const RDOP_SHOW = 4;
 
 const SUNELA_MAX_RESPONSE = 256;
 
+
+var ggg = null;
 
 class Sunela {
 
@@ -48,10 +51,15 @@ class Sunela {
 
 	begin_request(op, arg)
 	{
-		var data =  new Uint8Array([ op ]);
+		var data;
 
-		if (arg)
-			data += new TextEncoder("utf-8").encode(arg);
+		if (arg) {
+			data = new Uint8Array(arg.length + 1);
+			data.set(new Uint8Array([ op ]));
+			data.set(new TextEncoder("utf-8").encode(arg), 1);
+		} else {
+			data = new Uint8Array([ op ]);
+		}
 		return this.send(data);
 	}
 
@@ -88,8 +96,7 @@ class Sunela {
 			await this.wait(100);
 		}
 		if (res.status == "ok") {
-			var decoder = new TextDecoder();
-			return decoder.decode(res.data);
+			return res.data.buffer;
 		}
 		console.log("controlTransferIn status:", res.status);
 		return null;
@@ -103,7 +110,7 @@ class Sunela {
 		while (1) {
 			var got = await this.receive();
 
-			if (got == "")
+			if (!got.byteLength)
 				return res;
 			res.push(got)
 		}
@@ -115,9 +122,24 @@ class Sunela {
 
 	async ls()
 	{
+		var decoder = new TextDecoder();
+		var res;
+
 		await this.begin_request(RDOP_LS, null);
 		await this.end_request();
-		return await this.response();
+		res = await this.response();
+		return res.map((x) => decoder.decode(x));
+	}
+
+
+	async show(name)
+	{
+		var res;
+
+		await this.begin_request(RDOP_SHOW, name);
+		await this.end_request();
+		res = await this.response();
+		return res.map((x) => new Uint8Array(x));
 	}
 
 

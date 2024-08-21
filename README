@@ -41,4 +41,6 @@ show just the one Sunela device connected), where you select the Sunela device,
 and click "Connect".
 
 The browser will then request the list of account names from Sunela, and
-display them on the Javascript console.
+display them. Clicking on an account name shows its fields. (The Sunela only
+sends fields that are normally shown to users, e.g., "id" and "prev" are not
+sent. Also, the content of fields containing secrets is not sent.)
