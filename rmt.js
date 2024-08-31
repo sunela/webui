@@ -36,20 +36,27 @@ class Sunela {
 	// --- Send a request -------------------------------------------------
 
 
-	send(data)
+	async send(data)
 	{
 		console.log("sending", data);
-		return this.device.controlTransferOut({
-			requestType:	"vendor",
-			recipient:	"device",
-			request:	SUNELA_RMT,
-			index:		0,
-			value:		0,
-		}, data);
+		while (1) {
+			var res;
+
+			await this.wait(10);
+			res = await this.device.controlTransferOut({
+				requestType:	"vendor",
+				recipient:	"device",
+				request:	SUNELA_RMT,
+				index:		0,
+				value:		0,
+			}, data);
+			if (res.status != "stall")
+				break;
+		}
 	}
 
 
-	begin_request(op, arg)
+	async begin_request(op, arg)
 	{
 		var data;
 
@@ -60,13 +67,13 @@ class Sunela {
 		} else {
 			data = new Uint8Array([ op ]);
 		}
-		return this.send(data);
+		await this.send(data);
 	}
 
 
-	end_request()
+	async end_request()
 	{
-		return this.send(new Uint8Array(0));
+		await this.send(new Uint8Array(0));
 	}
 
 
