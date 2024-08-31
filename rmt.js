@@ -84,6 +84,7 @@ class Sunela {
 		var res;
 
 		while (1) {
+			await this.wait(10);
 			res = await this.device.controlTransferIn({
 				requestType:	"vendor",
 				recipient:	"device",
@@ -93,7 +94,6 @@ class Sunela {
 			}, SUNELA_MAX_RESPONSE);
 			if (res.status != "stall")
 				break;
-			await this.wait(100);
 		}
 		if (res.status == "ok") {
 			return res.data.buffer;
