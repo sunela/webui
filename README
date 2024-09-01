@@ -1,10 +1,14 @@
-Sunela Web UI
-=============
+Sunela Web User Interface
+=========================
 
 This repository contains the Sunela Web User Interface.
 
-The files in this repository are distributed under the terms of the MIT
+The code in this repository is distributed under the terms of the MIT
 License. See LICENSE.MIT for more details.
+
+All files that are not considered code, such as documents and drawings are
+licensed under Creative Commons CC-BY-4.0, see LICENSE.CC-BY for more
+information.
 
 THIS IS AN EXPERIMENTAL PROTOTYPE. THINGS CAN AND WILL CHANGE !
 
