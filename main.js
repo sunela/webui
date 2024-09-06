@@ -136,7 +136,13 @@ async function open_entry(span, name)
 {
 	var fields;
 
-	fields = await sunela.show(name);
+	try {
+		fields = await sunela.show(name);
+	} catch (error) {
+		console.error(error);
+		return;
+	}
+
 	for (var e of es) {
 		remove_extra_children(e);
 	}
@@ -165,7 +171,13 @@ async function open_sunela()
 
         await sunela.request_usb();
 	class_toggle(button, "hidden", true);
-	names = await sunela.ls();
+
+	try {
+		names = await sunela.ls();
+	} catch (error) {
+		console.error(error);
+		return;
+	}
 
 	var div = document.getElementById("accounts");
 
