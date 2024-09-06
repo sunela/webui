@@ -204,12 +204,10 @@ class Sunela {
 	}
 
 
-	async set_time(t)
+	async set_time(t = Math.floor(Date.now() / 1000))
 	{
 		var data;
 
-		if (t === null)
-			t = Math.floor(Date.now() / 1000);
 		data = new Uint8Array(9);
 		data[0] = RDOP_SET_TIME;
 		for (var i = 0; i != 8; i++) {

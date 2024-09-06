@@ -6,6 +6,8 @@
  */
 
 
+const MAX_T_DIFF_S = 2;
+
 const SUNELA_FIELD_ID		= 1;
 const SUNELA_FIELD_PREV		= 2;
 const SUNELA_FIELD_USER		= 3;
@@ -30,9 +32,11 @@ function is_string(x)
 
 function class_toggle(e, name, on)
 {
+	var re = new RegExp("\\s+\\b" + name + "\\b|\\b" + name + "\\b\\s*");
+
 	if (is_string(e))
 		e = document.getElementById(e);
-	e.className = e.className.replace(" " + name, "");
+	e.className = e.className.replace(re, "");
 	if (on) {
 		e.className += " " + name;
 	}
@@ -61,13 +65,7 @@ function remove_extra_children(e)
 }
 
 
-/* --- Main code ----------------------------------------------------------- */
-
-
-var sunela = new Sunela();
-
-var button = document.getElementById("button-connect");
-var es = [];
+/* --- Open an account entry ----------------------------------------------- */
 
 
 /*
@@ -165,20 +163,49 @@ async function open_entry(span, name)
 }
 
 
-async function open_sunela()
+/* --- Update the time ----------------------------------------------------- */
+
+
+function update_time(dt)
 {
-	var names;
+	var box = document.getElementById("set-time");
+	var delta = document.getElementById("dt");
+	var dismiss = document.getElementById("dt-dismiss");
+	var update = document.getElementById("dt-update");
+	var n = Math.abs(dt);
+	var s;
 
-        await sunela.request_usb();
-	class_toggle(button, "hidden", true);
-
-	try {
-		names = await sunela.ls();
-	} catch (error) {
-		console.error(error);
-		return;
+	if (n >= 100 * 7 * 24 * 3600) {
+		s = Math.floor(n / 3600 / 24 / 365.25).toString() + " years";
+	} else if (n > 3 * 7 * 24 * 3600) {
+		s = Math.floor(n / 3600 / 24 / 7).toString() + " weeks";
+	} else if (n > 4 * 24 * 3600) {
+		s = Math.floor(n / 3600 / 24).toString() + " days";
+	} else if (n > 4 * 3600) {
+		s = Math.floor(n / 3600).toString() + " hours";
+	} else if (n > 4 * 60) {
+		s = Math.floor(n / 3600).toString() + " minutes";
+	} else {
+		s = Math.floor(n).toString() + " seconds";
 	}
+	s += dt < 0 ? " behind" : " ahead";
+	delta.textContent = s;
 
+	class_toggle(box, "hidden", false);
+	dismiss.addEventListener("click",
+	    () => class_toggle(box, "hidden", true));
+	update.addEventListener("click", async () => {
+		await sunela.set_time();
+		class_toggle(box, "hidden", true);
+	});
+}
+
+
+/* --- Show the account list ----------------------------------------------- */
+
+
+function show_accounts(names)
+{
 	var div = document.getElementById("accounts");
 
 	es = [];
@@ -191,6 +218,37 @@ async function open_sunela()
 		span.addEventListener("click", () => open_entry(span, name));
 		div.appendChild(span);
 	}
+}
+
+
+/* --- Main code ----------------------------------------------------------- */
+
+
+var sunela = new Sunela();
+
+var button = document.getElementById("button-connect");
+var es = []; // list of HTML elements for account entries
+
+
+async function open_sunela()
+{
+	var dt, names;
+
+        await sunela.request_usb();
+	class_toggle(button, "hidden", true);
+
+	try {
+		dt = await sunela.get_time() - Date.now() / 1000;
+		names = await sunela.ls();
+	} catch (error) {
+		console.error(error);
+		return;
+	}
+
+	if (Math.abs(dt) > MAX_T_DIFF_S)
+		update_time(dt);
+
+	show_accounts(names);
 }
 
 

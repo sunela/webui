@@ -9,6 +9,9 @@
 	--entry-name-bg:	#b0f0b0;
 	--field-bg:		#c0ffc0;
 	--field-value-bg:	#d0ffd0;
+	--unsolicited-bg:	#ffff80;
+	--yes-bg:		#40ff40;
+	--no-bg:		#ff8080;
 }
 
 body {
@@ -20,14 +23,39 @@ body {
 	font-family:		'Open Sans';
 }
 
+.hidden {
+	display:		none;
+}
+
+/* --- Connect button ------------------------------------------------------ */
+
 #button-connect {
 	font-size:		18px;
 	font-weight:		bold;
 }
 
-.hidden {
-	display:		none;
+/* --- Time update --------------------------------------------------------- */
+
+#set-time {
+	background-color:	var(--unsolicited-bg);
+	padding:		8px;
+	margin-bottom:		10px;
 }
+
+#dt-dismiss {
+	background-color:	var(--no-bg);
+	font-weight:		bold;
+	padding:		6px;
+	margin-right:		10px;
+}
+
+#dt-update {
+	background-color:	var(--yes-bg);
+	font-weight:		bold;
+	padding:		6px;
+}
+
+/* --- List of accounts ---------------------------------------------------- */
 
 .entry {
 	display:		block;
