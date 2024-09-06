@@ -114,13 +114,32 @@ class Sunela {
 	async response()
 	{
 		var res = [];
+		var error = null;
 
 		while (1) {
 			var got = await this.receive();
 
-			if (!got.byteLength)
-				return res;
-			res.push(got)
+			if (!got.byteLength) {
+				if (error === null)
+					return res;
+				throw new Error(error);
+			}
+
+			var a = new Uint8Array(got);
+
+			if (a[0]) {
+				res.push(got)
+			} else {
+				var decoder = new TextDecoder();
+
+				if (error === null) {
+					error = "";
+				} else {
+					error += "; ";
+				}
+				got.slice(1);
+				error += decoder.decode(got);
+			}
 		}
 	}
 
